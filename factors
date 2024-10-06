@@ -1,21 +1,25 @@
-#!/usr/bin/env bash
+#!/usr/bin/python3
 
-factorize() {
-    n=$1
-    for i in $(seq 2 $(echo "sqrt($n)" | bc)); do
-        if (( n % i == 0 )); then
-            echo "$n=$i*$((n/i))"
-            return
-        fi
-    done
-    echo "$n=$n*1"
-}
+import sys
 
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <file>"
-    exit 1
-fi
+def factorize(n):
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return f"{n}={n//i}*{i}"
+    return f"{n}={n}*1"
 
-while read -r number; do
-    factorize "$number"
-done < "$1"
+if len(sys.argv) != 2:
+    print("Usage: factors <file>")
+    sys.exit(1)
+
+try:
+    with open(sys.argv[1], 'r') as file:
+        for line in file:
+            num = int(line.strip())
+            print(factorize(num))
+except FileNotFoundError:
+    print(f"Error: File '{sys.argv[1]}' not found")
+    sys.exit(1)
+except ValueError:
+    print("Error: Invalid number in the file")
+    sys.exit(1)
