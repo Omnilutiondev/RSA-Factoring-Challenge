@@ -16,14 +16,11 @@ def factorize(numb):
     numb (int): The numbers to be factorized
 
     Returns:
-    str: The string representation of the factorization
+    str: The string representation of the factorization in the format "n=p*q"
     """
-    if numb % 2 == 0:
-        return f"{numb}={numb//2}*2"
-
-    for ix in range(3, isqrt(numb) + 1, 2):
-        if numb % ix == 0:
-            return f"{numb}={numb//ix}*{ix}"
+    for i in range(2, isqrt(numb) + 1):
+        if numb % i == 0:
+            return f"{numb}={i}*{numb//i}"
 
     return f"{numb}={numb}*1"
 
@@ -31,7 +28,6 @@ def factorize(numb):
 def main():
     """Main function to read the file and factorize numbers."""
     if len(sys.argv) != 2:
-        print("Usage: factors <file>")
         sys.exit(1)
 
     try:
@@ -40,10 +36,8 @@ def main():
                 numb = int(line.strip())
                 print(factorize(numb))
     except FileNotFoundError:
-        print(f"Error: File '{sys.argv[1]}' not found")
         sys.exit(1)
     except ValueError as e:
-        print(f"Error: Invalid number in the file - {e}")
         sys.exit(1)
 
 
