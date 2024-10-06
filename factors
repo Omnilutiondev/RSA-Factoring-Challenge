@@ -8,39 +8,61 @@ import sys
 from math import isqrt
 
 
-def factorize(numb):
+def is_prime(n):
+    """
+    Check if a number is prime.
+
+    Args:
+    n (int): The number to check
+
+    Returns:
+    bool: True if the number is prime, False otherwise
+    """
+    if n < 2:
+        return False
+    for i in range(2, isqrt(n) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+def factorize(n):
     """
     Factorizes a number into a product of two smaller numbers.
 
     Args:
-    numb (int): The numbers to be factorized
+    n (int): The number to be factorized
 
     Returns:
     str: The string representation of the factorization in the format "n=p*q"
     """
-    for i in range(2, isqrt(numb) + 1):
-        if numb % i == 0:
-            return f"{numb}={i}*{numb//i}"
+    if is_prime(n):
+        return f"{n}={n}*1"
 
-    return f"{numb}={numb}*1"
+    for i in range(2, isqrt(n) + 1):
+        if n % i == 0:
+            return f"{n}={i}*{n//i}"
+
+    return f"{n}={n}*1"
 
 
 def main():
-    """Main function to read the file and factorize numbers."""
+    """
+    Main function to read the file and factorize numbers.
+    """
     if len(sys.argv) != 2:
         sys.exit(1)
 
     try:
         with open(sys.argv[1], 'r', encoding='utf-8') as file:
             for line in file:
-                numb = int(line.strip())
-                print(factorize(numb))
+                number = int(line.strip())
+                print(factorize(number))
     except FileNotFoundError:
         sys.exit(1)
-    except ValueError as e:
+    except ValueError:
         sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
-
