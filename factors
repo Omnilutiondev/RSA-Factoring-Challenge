@@ -1,25 +1,52 @@
 #!/usr/bin/python3
+"""
+This script factorizes as many numbers as possible from a file into a product of two smaller numbers.
+Usage: ./factors <file>
+"""
 
 import sys
+from math import isqrt
 
-def factorize(n):
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return f"{n}={n//i}*{i}"
-    return f"{n}={n}*1"
 
-if len(sys.argv) != 2:
-    print("Usage: factors <file>")
-    sys.exit(1)
+def factorize(numb):
+    """
+    Factorizes a number into a product of two smaller numbers.
 
-try:
-    with open(sys.argv[1], 'r') as file:
-        for line in file:
-            num = int(line.strip())
-            print(factorize(num))
-except FileNotFoundError:
-    print(f"Error: File '{sys.argv[1]}' not found")
-    sys.exit(1)
-except ValueError:
-    print("Error: Invalid number in the file")
-    sys.exit(1)
+    Args:
+    numb (int): The numbers to be factorized
+
+    Returns:
+    str: The string representation of the factorization
+    """
+    if numb % 2 == 0:
+        return f"{numb}={numb//2}*2"
+
+    for ix in range(3, isqrt(numb) + 1, 2):
+        if numb % ix == 0:
+            return f"{numb}={numb//ix}*{ix}"
+
+    return f"{numb}={numb}*1"
+
+
+def main():
+    """Main function to read the file and factorize numbers."""
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>")
+        sys.exit(1)
+
+    try:
+        with open(sys.argv[1], 'r', encoding='utf-8') as file:
+            for line in file:
+                numb = int(line.strip())
+                print(factorize(numb))
+    except FileNotFoundError:
+        print(f"Error: File '{sys.argv[1]}' not found")
+        sys.exit(1)
+    except ValueError as e:
+        print(f"Error: Invalid number in the file - {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
+
